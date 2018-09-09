@@ -6,5 +6,8 @@ module.exports = {
     proxyAuth:{
         enabled: true,
         tokens: ['anarray of strings']
+    },
+    express:{
+        port: 3000
     }
 };
