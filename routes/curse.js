@@ -7,24 +7,46 @@ const curse = new CAW({username: config.curseAPI.username, password: config.curs
 curse.Authenticate();
 
 function checkToken(req, res, next) {
-    if(config.proxyAuth.enabled){
-        if(config.proxyAuth.tokens.includes(req.get('authToken'))){
+    if (config.proxyAuth.enabled) {
+        if (config.proxyAuth.tokens.includes(req.get('authToken'))) {
             next()
-        }else{
+        } else {
             res.status(401);
             res.send('Unauthorized');
         }
-    }else{
+    } else {
         next();
     }
 }
 
-/* GET users listing. */
-router.post('/fingerprint', checkToken ,function (req, res, next) {
+router.get('/addon/:id', checkToken, function (req, res, next) {
+    // console.log(req.body);
+    curse.GetAddon(req.params.id)
+        .then(data => {
+            res.json(JSON.parse(data))
+        })
+        .catch(err => {
+            res.send(`Error handling request, server responded with: ${err}`)
+        });
+});
+
+router.post('/addon', checkToken, function (req, res, next) {
+    // console.log(req.body);
+    curse.GetAddons(req.body)
+        .then(data => {
+            res.json(JSON.parse(data))
+        })
+        .catch(err => {
+            res.send(`Error handling request, server responded with: ${err}`)
+        });
+});
+
+/* POST addon(s) fingerprint. */
+router.post('/fingerprint', checkToken, function (req, res, next) {
     // console.log(req.body);
     curse.GetFingerprintMatches(req.body)
         .then(data => {
-            res.json(data)
+            res.json(JSON.parse(data))
         })
         .catch(err => {
             res.send(`Error handling request, server responded with: ${err}`)
