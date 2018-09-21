@@ -46,7 +46,7 @@ router.post('/fingerprint', checkToken, function (req, res, next) {
     // console.log(req.body);
     curse.GetFingerprintMatches(req.body)
         .then(data => {
-            res.json(JSON.parse(data))
+            res.json(data)
         })
         .catch(err => {
             res.send(`Error handling request, server responded with: ${err}`)
